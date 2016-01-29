@@ -123,11 +123,11 @@ public class Recipe implements Serializable {
 	static public Recipe getRecipe(Context context) throws ContextException {
 		Recipe r = new Recipe();
 		r.name = (String)context.getValue("name");
-		r.price = (int)context.getValue("price");
-		r.amtCoffee = (int)context.getValue("amtCoffee");
-		r.amtMilk = (int)context.getValue("amtMilk");
-		r.amtSugar = (int)context.getValue("amtSugar");
-		r.amtChocolate = (int)context.getValue("amtChocolate");
+		r.price = (Integer) context.getValue("price");
+		r.amtCoffee = (Integer)context.getValue("amtCoffee");
+		r.amtMilk = (Integer)context.getValue("amtMilk");
+		r.amtSugar = (Integer)context.getValue("amtSugar");
+		r.amtChocolate = (Integer)context.getValue("amtChocolate");
 		return r;
 	}
 

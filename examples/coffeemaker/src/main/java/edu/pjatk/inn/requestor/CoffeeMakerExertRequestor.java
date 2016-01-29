@@ -2,6 +2,7 @@ package edu.pjatk.inn.requestor;
 
 import edu.pjatk.inn.coffeemaker.CoffeeService;
 import edu.pjatk.inn.coffeemaker.Delivery;
+import edu.pjatk.inn.coffeemaker.InventoryService;
 import sorcer.core.requestor.ExertRequestor;
 import sorcer.service.*;
 import sorcer.service.modeling.Model;
@@ -32,6 +33,8 @@ public class CoffeeMakerExertRequestor extends ExertRequestor {
                 return createModel();
             } else if (option.equals("exertion")) {
                 return createExertion();
+            }else if (option.equals("execute")) {
+                return execute();
             }
         } catch (Exception e) {
             throw new MogramException(e);
@@ -64,6 +67,28 @@ public class CoffeeMakerExertRequestor extends ExertRequestor {
 
         Job drinkCoffee = job(coffee, delivery,
                 pipe(outPoint(coffee, "coffee/change"), inPoint(delivery, "delivery/paid")));
+
+
+        return drinkCoffee;
+    }
+
+    private Exertion execute() throws Exception {
+        Task coffee = task("coffee", sig("makeCoffee", CoffeeService.class), context(
+                ent("recipe/name", "espresso"),
+                ent("coffee/paid", 120),
+                ent("coffee/change"),
+                ent("coffee/milk"),
+                ent("recipe", getEspressoContext())));
+
+        Task inventory = task("inventory", sig("isEnoughMilk", InventoryService.class), context(
+                ent("location", "PJATK"),
+                ent("delivery/paid"),
+                ent("room", "101")));
+
+        Job drinkCoffee = job(coffee, inventory,
+                pipe(outPoint(coffee, "coffee/milk"), inPoint(inventory, "delivery/paid")));
+
+        System.out.println("\n\nweszlo execute\n\n");
 
         return drinkCoffee;
     }
